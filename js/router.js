@@ -1,51 +1,53 @@
-import { Navbar } from './components/Navbar.js';
-import { Form } from './components/Form.js';
-import { Table } from './components/Table.js';
-
-const route = (event) => {
-  event = event || window.event;
-  event.preventDefault();
-  window.history.pushState({}, "", event.target.href);
-  handleLocation();
-};
+import { Login } from "./views/auth/Login.js";
+import { Register } from "./views/auth/Register.js";
+import { Homepage } from "./views/Homepage.js";
 
 const routes = {
-  "/": "navbar",
-  "/cadastrar-tarefa": "form-task",
-  "/cadastrar-usuario": "form-user",
-  "/visualizar-tarefas": "table",
-  "/auth/login": "login",
-  "/auth/register": "form-user",
+  "/": {
+    template: () => new Homepage().render(),
+    title: "Página Inicial",
+    description: "Página inicial do gerenciador de tarefas",
+    path: "/",
+  },
+  "/auth/login": {
+    template: () => new Login().render(),
+    title: "Login",
+    description: "Página de login do gerenciador de tarefas",
+    path: "/auth/login",
+  },
+  "/auth/register": {
+    template: () => new Register().render(),
+    title: "Cadastro",
+    description: "Página de cadastro do gerenciador de tarefas",
+    path: "/auth/register",
+  },
 };
 
-const handleLocation = async () => {
-  const path = window.location.pathname;
-  const route = routes[path] || routes[404];
-  const appElement = document.getElementById("app");
-
-  switch (route) {
-    case "navbar":
-      const navbar = new Navbar();
-      appElement.innerHTML = navbar.render();
-      break;
-    case "form-task":
-      const formTask = new Form('task');
-      appElement.innerHTML = formTask.render();
-      break;
-    case "form-user":
-      const formUser = new Form('user');
-      appElement.innerHTML = formUser.render();
-      break;
-    case "table":
-      const table = new Table();
-      appElement.innerHTML = table.render();
-      break;
-    default:
-      appElement.innerHTML = '<h1>404 - Página não encontrada</h1>';
+const loadTemplate = (route) => {
+  if (!route) {
+    console.error("Route not found");
+    return;
+  }
+  document.getElementById("app").innerHTML = route.template();
+  document.title = route.title;
+  const metaDescription = document.querySelector('meta[name="description"]');
+  if (metaDescription) {
+    metaDescription.setAttribute("content", route.description);
+  } else {
+    console.error('Meta description tag not found');
   }
 };
-
-window.onpopstate = handleLocation;
-window.route = route;
-
-handleLocation();
+export const locationHandler = async () => {
+  let location = window.location.hash.replace("#", "");
+  if (location === "") {
+    location = "/";
+  }
+  const route = routes[location];
+  if (!route) {
+    console.error(`Route for location "${location}" not found`);
+    return;
+  }
+  loadTemplate(route);
+};
+window.addEventListener("load", locationHandler);
+window.addEventListener("hashchange", locationHandler);
