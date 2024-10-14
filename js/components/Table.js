@@ -1,4 +1,4 @@
-class Table {
+export class Table {
   constructor(fetchService) {
     this.fetchService = fetchService;
   }

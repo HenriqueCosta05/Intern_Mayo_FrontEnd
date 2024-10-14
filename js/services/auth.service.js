@@ -1,4 +1,4 @@
-class AuthService {
+export class AuthService {
     constructor(apiBaseUrl, fetchService) {
         this.apiBaseUrl = apiBaseUrl;
         this.fetchService = fetchService;

@@ -1,7 +1,6 @@
 import { Navbar } from './components/Navbar.js';
 import { FetchService } from './services/fetch.service.js';
 import { AuthService } from './services/auth.service.js';
-
 class App {
     constructor(apiBaseUrl) {
         this.apiBaseUrl = apiBaseUrl;
@@ -14,12 +13,13 @@ class App {
     init() {
         const navbar = new Navbar(this.fetchService);
         navbar.render();
-        this.appElement.innerHTML = navbar;
     }
 }
 
 const apiBaseUrl = 'http://127.0.0.1:3000'; // Local
 // const apiBaseUrl = 'https://api.example.com'; // Production
 
-const app = new App(apiBaseUrl);
-app.init();
+export const app = new App(apiBaseUrl);
+
+
+    

@@ -5,7 +5,7 @@ export class Navbar {
         // HTMLs
         this.loggedOutNavbar = `
             <nav class="navbar navbar-expand-lg navbar-light bg-light">
-                <a class="navbar-brand" href="#">Gerenciador de Tarefas</a>
+                <a class="navbar-brand m-2" href="#">Gerenciador de Tarefas</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -14,11 +14,14 @@ export class Navbar {
                         <li class="nav-item">
                             <a class="nav-link" href="/auth/login">Login</a>
                         </li>
+                         <li class="nav-item">
+                            <a class="nav-link" href="/auth/register">Cadastro</a>
+                        </li>
                     </ul>
                 </div>
             </nav>
         `;
-        this.loggedInNavbar = `
+               this.loggedInNavbar = `
             <nav class="navbar navbar-expand-lg navbar-light bg-light">
                 <a class="navbar-brand" href="#">Gerenciador de Tarefas</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -27,13 +30,13 @@ export class Navbar {
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav">
                         <li class="nav-item active">
-                            <a class="nav-link" href="/">Visualizar Todas as Tarefas <span class="sr-only">(current)</span></a>
+                            <a class="nav-link" href="#/">Visualizar Todas as Tarefas <span class="sr-only">(current)</span></a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/cadastrar-tarefa">Cadastrar Tarefa</a>
+                            <a class="nav-link" href="#/cadastrar-tarefa">Cadastrar Tarefa</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/editar-tarefa">Editar Tarefa</a>
+                            <a class="nav-link" href="#/editar-tarefa">Editar Tarefa</a>
                         </li>
                     </ul>
                 </div>
@@ -51,5 +54,7 @@ export class Navbar {
         } else {
             navbar.innerHTML = this.loggedOutNavbar;
         }
+
+        app.appendChild(navbar);
     }
 }
