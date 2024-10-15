@@ -17,7 +17,7 @@ class App {
 
 }
 
-const apiBaseUrl = 'http://127.0.0.1:3000'; // Local
-// const apiBaseUrl = 'https://api.example.com'; // Production
+export const apiBaseUrl = 'http://127.0.0.1:3000'; // Local
+// export const apiBaseUrl = 'https://api.example.com'; // Production
 
 export const app = new App(apiBaseUrl);

@@ -1,35 +1,53 @@
+import { Navbar } from "../../components/Navbar.js";
+import { Form } from "../../components/Form.js";
+import { apiBaseUrl, app } from "../../app.js";
+
 export class Register {
   constructor(authService) {
     this.authService = authService;
   }
 
   render() {
-    const app = document.getElementById("app");
-    const register = document.createElement("section");
-    register.innerHTML = `
-        ${Navbar.render()}
-    <form action="${this.fetchService.sendForm()}" method="POST">
-     <div class="form-group">
-          <label for="username">Nome de Usuário</label>
-          <input type="text" class="form-control" id="username" name="username" value="${
-            user ? user.username : ""
-          }">
-        </div>
-        <div class="form-group">
-          <label for="email">Nome</label>
-          <input type="text" class="form-control" id="email" name="email" value="${
-            user ? user.email : ""
-          }">
-        </div>
-        <div class="form-group">
-          <label for="password">Email</label>
-          <input type="email" class="form-control" id="password" name="password" value="${
-            user ? user.password : ""
-          }">
-        </div>
-        <button type="submit" class="btn btn-primary">Login</button>
-      </form>
-        `;
-    app.appendChild(register);
+    const form = new Form(app.fetchService);
+
+    const fields = [
+      { name: "Nome de Usuário", type: "text" },
+      { name: "E-mail", type: "email" },
+      { name: "Senha", type: "password" }
+    ];
+
+    const formConfig = {
+      method: "POST",
+      action: `${apiBaseUrl}/auth/register`,
+      id: "register-form"
+    };
+
+    const html = `
+      ${Navbar.loggedOutNavbar()}
+      ${form.render(fields, "Cadastrar", formConfig)}
+    `;
+
+    setTimeout(() => {
+      document.getElementById('register-form').addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const formData = new FormData(event.target);
+        const username = formData.get('username');
+        const email = formData.get('email');
+        const password = formData.get('password');
+        try {
+          const response = await this.authService.register(username, email, password);
+          if (response.access_token) {
+            window.location.hash = '/#/app/tasks';
+          } else {
+            alert('Registration failed');
+          }
+        } catch (error) {
+          console.error('Registration error:', error);
+          alert('Erro ao cadastrar usuário! Tente novamente mais tarde');
+        }
+      });
+    }, 0);
+
+    return html;
   }
 }

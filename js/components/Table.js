@@ -1,16 +1,12 @@
+import { FetchService } from "../services/fetch.service.js";
+
 export class Table {
   constructor(fetchService) {
-    this.fetchService = fetchService;
+    this.fetchService = FetchService;
   }
 
   render() {
-    const app = document.getElementById("app");
-    const table = document.createElement("section");
-    app.appendChild(table);
-
-    // HTMLs
-    
-      let tableHtml = `
+    return `
         <table class="table">
             <thead>
                 <tr>
@@ -22,17 +18,14 @@ export class Table {
                 </tr>
             </thead>
             <tbody>
-                <tr>
                     ${this.renderTableBody()}
-                   </tr>
-                   </tbody>
+            </tbody>
         </table>
         `;
-    table.innerHTML = tableHtml;
     }
     
     renderTableBody() {
-        const tasks = this.fetchService.getTasks();
+        const tasks = this.fetchService.get("/tasks");
         let tableBody = "";
         tasks.forEach(task => {
             tableBody += `
@@ -46,6 +39,13 @@ export class Table {
                 </td>
             `;
         });
+        if(!tasks.length) {
+            tableBody = `
+                <tr>
+                    <td colspan="5">Nenhuma tarefa encontrada</td>
+                </tr>
+            `;
+        }
         return tableBody;
     }
 }

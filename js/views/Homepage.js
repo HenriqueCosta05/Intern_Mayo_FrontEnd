@@ -12,8 +12,8 @@ export class Homepage {
                 <hr class="my-4">
                 <p>Para começar, faça o login ou cadastre-se.</p>
                 <div class="flex m-auto align-items-center justify-content-center flex-column">
-                <a class="btn btn-dark btn-lg w-100 my-3 mx-auto" href="/auth/login" role="button">Login</a>
-                <a class="btn btn-dark btn-lg w-100 my-3 mx-auto" href="/auth/register" role="button">Cadastro</a>
+                <a class="btn btn-dark btn-lg w-100 my-3 mx-auto" href="/#/auth/login" role="button">Login</a>
+                <a class="btn btn-dark btn-lg w-100 my-3 mx-auto" href="/#/auth/register" role="button">Cadastro</a>
                 </div>
             </div>
         `;

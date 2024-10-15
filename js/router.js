@@ -1,6 +1,8 @@
 import { Login } from "./views/auth/Login.js";
 import { Register } from "./views/auth/Register.js";
 import { Homepage } from "./views/Homepage.js";
+import { TasksHomepage } from "./views/task/Homepage.js";
+import { app } from "./app.js";
 
 const routes = {
   "/": {
@@ -16,38 +18,30 @@ const routes = {
     path: "/auth/login",
   },
   "/auth/register": {
-    template: () => new Register().render(),
+    template: () => new Register(app.authService).render(),
     title: "Cadastro",
     description: "Página de cadastro do gerenciador de tarefas",
     path: "/auth/register",
   },
+  "/app/tasks": {
+    template: () => new TasksHomepage().render(),
+    title: "Tarefas",
+    description: "Página de tarefas do gerenciador de tarefas",
+    path: "/app/tasks",
+  },
 };
 
-const loadTemplate = (route) => {
-  if (!route) {
-    console.error("Route not found");
-    return;
-  }
-  document.getElementById("app").innerHTML = route.template();
-  document.title = route.title;
-  const metaDescription = document.querySelector('meta[name="description"]');
-  if (metaDescription) {
-    metaDescription.setAttribute("content", route.description);
+export function locationHandler() {
+  const path = window.location.hash.replace('#', '') || '/';
+  const route = routes[path];
+  if (route) {
+    document.title = route.title;
+    document.querySelector('meta[name="description"]').setAttribute('content', route.description);
+    document.getElementById('app').innerHTML = route.template();
   } else {
-    console.error('Meta description tag not found');
+    document.getElementById('app').innerHTML = '<h1>404 - Not Found</h1>';
   }
-};
-export const locationHandler = async () => {
-  let location = window.location.hash.replace("#", "");
-  if (location === "") {
-    location = "/";
-  }
-  const route = routes[location];
-  if (!route) {
-    console.error(`Route for location "${location}" not found`);
-    return;
-  }
-  loadTemplate(route);
-};
-window.addEventListener("load", locationHandler);
-window.addEventListener("hashchange", locationHandler);
+}
+
+window.addEventListener('hashchange', locationHandler);
+window.addEventListener('load', locationHandler);
