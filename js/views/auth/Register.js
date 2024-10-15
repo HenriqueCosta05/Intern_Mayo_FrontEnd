@@ -1,19 +1,20 @@
 import { Navbar } from "../../components/Navbar.js";
 import { Form } from "../../components/Form.js";
-import { apiBaseUrl, app } from "../../app.js";
+import { apiBaseUrl } from "../../app.js";
+import { AuthService } from "../../services/auth.service.js";
 
 export class Register {
   constructor(authService) {
-    this.authService = authService;
+    this.authService = new AuthService();
   }
 
   render() {
-    const form = new Form(app.fetchService);
+    const form = new Form();
 
     const fields = [
-      { name: "Nome de Usuário", type: "text" },
-      { name: "E-mail", type: "email" },
-      { name: "Senha", type: "password" }
+      { label: "Nome de Usuário", name: "username", type: "text" },
+      { label: "E-mail", name: "email", type: "email" },
+      { label: "Senha", name: "password", type: "password" }
     ];
 
     const formConfig = {
@@ -37,7 +38,8 @@ export class Register {
         try {
           const response = await this.authService.register(username, email, password);
           if (response.access_token) {
-            window.location.hash = '/#/app/tasks';
+            alert("Usuário criado com sucesso!")
+            window.location.hash = '/app/tasks';
           } else {
             alert('Registration failed');
           }

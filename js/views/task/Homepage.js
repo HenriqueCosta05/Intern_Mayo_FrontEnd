@@ -4,10 +4,10 @@ import { Table } from "../../components/Table.js";
 export class TasksHomepage {
     constructor() {}
     
-    render() {
+    async render() {
         return `
-                ${new Navbar().loggedInNavbar()}
-                ${new Table().render()}
-                `
+            ${Navbar.loggedInNavbar()}
+            ${await Table.render()}
+        `;
     }
 }

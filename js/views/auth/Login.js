@@ -4,13 +4,10 @@ import { Navbar } from "../../components/Navbar.js";
 import { AuthService } from "../../services/auth.service.js";
 
 export class Login {
-  constructor(authService) {
-    this.authService = new AuthService();
-  }
 
   formFields = [
-    {name: "E-mail", type: "email"},
-    {name: "Senha", type: "password"}
+    {name: "email", label: "E-mail", type: "email"},
+    {name: "password",  label: "Senha", type: "password"}
   ]
 
   form = {
@@ -20,11 +17,36 @@ export class Login {
   }
 
   render() {
-    
-    return `
+    const html = `
       ${Navbar.loggedOutNavbar()}
       ${new Form().render(this.formFields, 'Login', this.form)}
-    `;
+    `
+    setTimeout(() => {
+      document
+        .getElementById("login-form")
+        .addEventListener("submit", async (event) => {
+          event.preventDefault();
+          const formData = new FormData(event.target);
+          const email = formData.get("email");
+          const password = formData.get("password");
+          try {
+            const response = await new AuthService(apiBaseUrl).login(
+              email,
+              password
+            );
+            if (response.access_token) {
+              alert("Usuário logado com sucesso!");
+              window.location.hash = "/app/tasks";
+            } else {
+              alert("Login falhou");
+            }
+          } catch (error) {
+            console.error("Erro ao realizar login:", error);
+            alert("Erro ao cadastrar usuário! Tente novamente mais tarde");
+          }
+        });
+    }, 0);
+    return html;
     
   }
 }

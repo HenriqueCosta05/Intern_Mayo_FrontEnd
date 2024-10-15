@@ -1,3 +1,5 @@
+import { FetchService } from "./fetch.service.js";
+
 export class AuthService {
     constructor(apiBaseUrl, fetchService) {
         this.apiBaseUrl = apiBaseUrl;
@@ -5,7 +7,7 @@ export class AuthService {
     }
     
     async login(email, password) {
-        const response = await this.fetchService.post('/auth/login', { email, password });
+        const response = await new FetchService().post('/auth/login', { email, password });
         if (response.access_token) {
             localStorage.setItem("token", response.access_token);
         }
@@ -24,11 +26,17 @@ export class AuthService {
         return false;
     }
 
-    async register() {
-        const response = await this.fetchService.post('/auth/register', { email, password });
-        if (response.access_token) {
-            localStorage.setItem("token", response.access_token);
+    async register(username, email, password) {
+        try {
+            const response = await this.fetchService.post('/auth/register', { username, email, password });
+            console.log(response);
+            if (response && response.access_token) {
+                localStorage.setItem("token", response.access_token);
+            }
+            return response;
+        } catch (e) {
+            console.error('Registration error:', e);
+            return false;
         }
-        return response;
     }
  }

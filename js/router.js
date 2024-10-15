@@ -24,20 +24,21 @@ const routes = {
     path: "/auth/register",
   },
   "/app/tasks": {
-    template: () => new TasksHomepage().render(),
+    template: async () => await new TasksHomepage().render(),
     title: "Tarefas",
     description: "Página de tarefas do gerenciador de tarefas",
     path: "/app/tasks",
   },
 };
 
-export function locationHandler() {
+export async function locationHandler() {
   const path = window.location.hash.replace('#', '') || '/';
   const route = routes[path];
   if (route) {
     document.title = route.title;
     document.querySelector('meta[name="description"]').setAttribute('content', route.description);
-    document.getElementById('app').innerHTML = route.template();
+    const content = await route.template();
+    document.getElementById('app').innerHTML = content;
   } else {
     document.getElementById('app').innerHTML = '<h1>404 - Not Found</h1>';
   }

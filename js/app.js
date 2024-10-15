@@ -1,7 +1,8 @@
-import { FetchService } from './services/fetch.service.js';
-import { AuthService } from './services/auth.service.js';
+
 import './router.js';
 import { locationHandler } from './router.js';
+import { AuthService } from './services/auth.service.js';
+import { FetchService } from './services/fetch.service.js';
 
 class App {
   constructor(apiBaseUrl) {

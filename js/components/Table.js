@@ -1,51 +1,50 @@
 import { FetchService } from "../services/fetch.service.js";
 
 export class Table {
-  constructor(fetchService) {
-    this.fetchService = FetchService;
+  static async renderTableBody() {
+    let tableBody = '';
+    const tasks = await new FetchService().get('/task');
+    if (tasks.length > 0) {
+      tableBody = tasks.map(task => `
+        <tr>
+          <td>${task.id}</td>
+          <td>${task.title}</td>
+          <td>${task.description}</td>
+          <td>${task.status}</td>
+          <td>
+            <button class="btn btn-primary">Edit</button>
+            <button class="btn btn-danger">Delete</button>
+          </td>
+        </tr>
+      `).join('');
+    } else {
+      tableBody = `
+        <tr>
+          <td colspan="5">Nenhuma tarefa encontrada</td>
+        </tr>
+      `;
+    }
+    return tableBody;
   }
 
-  render() {
-    return `
-        <table class="table">
-            <thead>
-                <tr>
-                    <th scope="col">ID</th>
-                    <th scope="col">Título</th>
-                    <th scope="col">Descrição</th>
-                    <th scope="col">Status</th>
-                    <th scope="col">Ações</th>
-                </tr>
-            </thead>
-            <tbody>
-                    ${this.renderTableBody()}
-            </tbody>
-        </table>
-        `;
-    }
-    
-    renderTableBody() {
-        const tasks = this.fetchService.get("/tasks");
-        let tableBody = "";
-        tasks.forEach(task => {
-            tableBody += `
-                <th scope="row">${task.id}</th>
-                <td>${task.title}</td>
-                <td>${task.description}</td>
-                <td>${task.status}</td>
-                <td>
-                    <button type="button" class="btn btn-primary">Editar</button>
-                    <button type="button" class="btn btn-danger">Excluir</button>
-                </td>
-            `;
-        });
-        if(!tasks.length) {
-            tableBody = `
-                <tr>
-                    <td colspan="5">Nenhuma tarefa encontrada</td>
-                </tr>
-            `;
-        }
-        return tableBody;
-    }
+  static async render() {
+    const tableBody = await this.renderTableBody();
+    const tableHtml = `
+      <table class="table w-75 my-6 mx-auto">
+        <thead>
+          <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Título</th>
+            <th scope="col">Descrição</th>
+            <th scope="col">Status</th>
+            <th scope="col">Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${tableBody}
+        </tbody>
+      </table>
+    `;
+    return tableHtml;
+  }
 }
